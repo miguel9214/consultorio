@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('eps', function (Blueprint $table) {
             $table->unsignedSmallInteger("id")->autoIncrement();
-            $table->string('rol')->unique();
-            $table->string('email')->unique();
-            $table->string('password')->nullable();
+            $table->string('name');
+            $table->string('address');
+            $table->string('phone')->unique();
+            $table->string('code')->unique();
+            $table->date('contract_start_date');
+            $table->date('contract_end_date');
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('eps');
     }
 };

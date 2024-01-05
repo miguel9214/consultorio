@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('consultation_types', function (Blueprint $table) {
             $table->unsignedSmallInteger("id")->autoIncrement();
-            $table->string('rol')->unique();
-            $table->string('email')->unique();
-            $table->string('password')->nullable();
+            $table->string('name');
+            $table->float('price');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('consultation_types');
     }
 };
