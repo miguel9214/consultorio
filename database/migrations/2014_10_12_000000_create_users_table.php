@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->unsignedSmallInteger("id")->autoIncrement();
-            $table->string('rol')->unique();
+            $table->enum('rol', ['admin', 'doctor', 'paciente', 'user'])->nullable();
             $table->string('email')->unique();
             $table->string('password')->nullable();
             $table->timestamps();

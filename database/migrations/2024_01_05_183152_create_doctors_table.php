@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pacient', function (Blueprint $table) {
+        Schema::create('doctors', function (Blueprint $table) {
             $table->unsignedInteger("id")->autoIncrement();
-            $table->string("affilliate_type");
-            $table->unsignedInteger("person_id");
-            $table->unsignedSmallInteger("eps_id");
+            $table->string("speciality")->nullable();
             $table->timestamps();
+            $table->unsignedInteger("person_id");
             $table->foreign('person_id')->references('id')->on('persons');
-            $table->foreign('eps_id')->references('id')->on('eps');
-
         });
     }
 
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pacient');
+        Schema::dropIfExists('doctors');
     }
 };
