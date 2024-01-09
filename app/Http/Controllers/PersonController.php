@@ -76,7 +76,13 @@ class PersonController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $person = Person::find($id);
+
+        if ($person) {
+            return response()->json(['message' => 'Person found', 'data' => $person]);
+        } else {
+            return response()->json(['message' => 'Person not found']);
+        }
     }
 
     /**
@@ -92,7 +98,47 @@ class PersonController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'type_document' => 'required|string',
+            'document' => 'required|numeric',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'sex' => 'required|string',
+            'phone' => 'required|numeric',
+            'birthdate' => 'required|date',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'neighborhood' => 'required|string',
+            'created_by_user' => 'required|numeric',
+            'updated_by_user' => 'required|numeric'
+
+        ]);
+
+        $person = Person::find($id);
+
+        if ($person) {
+            $person->update([
+                'type_document' => $request->input('type_document'),
+                'document' => $request->input('document'),
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'sex' => $request->input('sex'),
+                'phone' => $request->input('phone'),
+                'birthdate' => $request->input('birthdate'),
+                'address' => $request->input('address'),
+                'city' => $request->input('city'),
+                'state' => $request->input('state'),
+                'neighborhood' => $request->input('neighborhood'),
+                'created_by_user' => 1,
+                'updated_by_user' => 1
+            ]);
+
+            return response()->json(['message'=>'Person update successfully','data'=>$person]);
+        }else{
+            return response()->json(['error'=>'error']);
+        }
+
     }
 
     /**
@@ -100,6 +146,16 @@ class PersonController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $person =Person::find($id);
+
+        if(!$person){
+
+           return response()->json(['message'=>'Person not found']);
+        }else{
+
+            $person->delete();
+
+            return response()->json(['message'=>'Person deleted successfully']);
+        }
     }
 }
