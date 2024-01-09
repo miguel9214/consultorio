@@ -134,11 +134,10 @@ class PersonController extends Controller
                 'updated_by_user' => 1
             ]);
 
-            return response()->json(['message'=>'Person update successfully','data'=>$person]);
-        }else{
-            return response()->json(['error'=>'error']);
+            return response()->json(['message' => 'Person update successfully', 'data' => $person]);
+        } else {
+            return response()->json(['error' => 'error']);
         }
-
     }
 
     /**
@@ -146,16 +145,16 @@ class PersonController extends Controller
      */
     public function destroy(string $id)
     {
-        $person =Person::find($id);
+        $person = Person::find($id);
 
-        if(!$person){
+        if (!$person) {
 
-           return response()->json(['message'=>'Person not found']);
-        }else{
+            return response()->json(['message' => 'Person not found']);
+        } else {
 
             $person->delete();
 
-            return response()->json(['message'=>'Person deleted successfully']);
+            return response()->json(['message' => 'Person deleted successfully']);
         }
     }
 }
