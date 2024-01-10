@@ -60,7 +60,7 @@ class AuthController extends Controller
 
             $patients = new Pacient();
             $patients->affilliate_type = $request->affilliate_type;
-            $patients->eps_id = $request->eps;
+            $patients->eps_id = $request->eps_id;
             $patients->person_id = $person->id;
             $patients->save();
 
