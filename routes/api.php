@@ -13,7 +13,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 Route::apiResource("v1/persons", PersonController::class);
 
-Route::get('register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::get('users', [AuthController::class, 'allUsers']);

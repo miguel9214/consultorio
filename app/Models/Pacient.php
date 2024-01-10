@@ -8,20 +8,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Pacient extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'users';
+    protected $table = 'patients';
 
 
     protected $fillable = [
-        'rol',
-        'email',
-        'password'
+        'affilliate_type',
+        'person_id',
+        'eps_id'
     ];
 
-    protected $hidden = [
-        'password',
-    ];
 }

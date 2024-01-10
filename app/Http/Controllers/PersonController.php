@@ -63,6 +63,8 @@ class PersonController extends Controller
             'created_by_user' => $request->input('created_by_user'),
             'updated_by_user' => $request->input('updated_by_user')
         ]);
+        $person->save();
+
 
         if ($person) {
             return response()->json(['message' => 'Person created successfully']);

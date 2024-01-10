@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Person;
+use App\Models\Pacient;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -14,10 +17,6 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'rol' => 'required|string',
-            'name' => 'requerid|string',
-            'email' => 'required|email|string',
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             'type_document' => 'required|string',
             'document' => 'required|numeric',
             'first_name' => 'required|string',
@@ -25,44 +24,57 @@ class AuthController extends Controller
             'sex' => 'required|string',
             'phone' => 'required|numeric',
             'birthdate' => 'required|date',
+            'email' => 'required|email|string',
             'address' => 'required|string',
             'city' => 'required|string',
             'state' => 'required|string',
             'neighborhood' => 'required|string',
-            'created_by_user' => 'required|numeric',
-            'updated_by_user' => 'required|numeric'
+            'password' => 'required',
+            // 'password_confirmation' => 'required|string|confirmed',
         ]);
 
-        $user = new User();
-        $user->rol = $request->rol;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password =  Hash::make($request->password);
-        $user->type_document = $request->type_document;
-        $user->document = $request->document;
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->sex = $request->sex;
-        $user->phone = $request->phone;
-        $user->birthdate = $request->birthdate;
-        $user->address = $request->address;
-        $user->city = $request->city;
-        $user->state = $request->state;
-        $user->neighborhood = $request->neighborhood;
-        $user->created_by_user = $request->created_by_user;
-        $user->updated_by_user = $request->updated_by_user;
-        $user->save();
+        DB::beginTransaction();
 
-        if ($user) {
+        try {
+            $user = new User();
+            $user->rol = "paciente";
+            $user->email = $request->email;
+            $user->password =  Hash::make($request->password);
+            $user->save();
+
+            $person = Person::create([
+                'type_document' => $request->input('type_document'),
+                'document' => $request->input('document'),
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'sex' => $request->input('sex'),
+                'phone' => $request->input('phone'),
+                'birthdate' => $request->input('birthdate'),
+                'address' => $request->input('address'),
+                'city' => $request->input('city'),
+                'state' => $request->input('state'),
+                'neighborhood' => $request->input('neighborhood'),
+                "user_id" => $user->id
+            ]);
+            $person->save();
+
+            $patients = new Pacient();
+            $patients->affilliate_type = $request->affilliate_type;
+            $patients->eps_id = $request->eps;
+            $patients->person_id = $person->id;
+            $patients->save();
+
+            DB::commit();
             return response()->json(['message' => 'Usuario created successfully']);
-        } else {
-            return response()->json(['message' => 'Error']);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => $th->getMessage()],422);
         }
     }
 
     public function login(Request $request)
     {
-
         $credentials = $request->validate([
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
@@ -79,29 +91,12 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/')->with('status', 'You are logged in');
-    }
-
-    public function userProfile(Request $request)
-    {
-        return response()->json([
-            "message" => "userProfile ok",
-            "userData" => auth()->user()
-        ]);
+        return response()->json(['message' => 'Login exitoso']);
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect("/login");
-    }
-
-    public function allUsers()
-    {
-        $users = User::all();
-
-        return response()->json([
-            "users" => $users
-        ]);
+        return response()->json(['message' => 'Sesión creada correctamente']);
     }
 }

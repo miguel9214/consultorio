@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('city');
             $table->string('state');
             $table->string('neighborhood');
-            $table->unsignedSmallInteger("created_by_user");
-            $table->unsignedSmallInteger("updated_by_user");
+            $table->unsignedSmallInteger("created_by_user")->nullable();
+            $table->unsignedSmallInteger("updated_by_user")->nullable();
             $table->timestamps();
         });
     }
