@@ -18,7 +18,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'type_document' => 'required|string',
-            'document' => 'required|numeric',
+            'document' => 'required|unique:persons,document,NULL,id,type_document,' .$request->type_document,
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'sex' => 'required|string',
