@@ -96,7 +96,7 @@ class AuthController extends Controller
                 ]);
         }
 
-        $request->session()->regenerate();
+        // $request->session()->regenerate();
 
         return response()->json(['message' => 'Login exitoso']);
     }
