@@ -89,11 +89,7 @@ class AuthController extends Controller
 
 
         if (!Auth::attempt($credentials, $request->boolean('remember'))) {
-            return redirect()->route('login')
-                ->withInput($request->only('email', 'remember'))
-                ->withErrors([
-                    'email' => __('auth.failed')
-                ]);
+            return response()->json(['message' => 'correo o contraseña incorrectos'],422);
         }
 
         // $request->session()->regenerate();
