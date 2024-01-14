@@ -6,7 +6,7 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::group(['middleware' => ['auth', 'verified','web']], function () {
+Route::group(['middleware' => ['auth', 'verified',]], function () {
     Route::get('user-profile', [AuthController::class, 'userProfile']);
     Route::post('logout', [AuthController::class, 'logout']);
     

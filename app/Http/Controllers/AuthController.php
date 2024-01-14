@@ -92,7 +92,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'correo o contraseña incorrectos'],422);
         }
 
-        // $request->session()->regenerate();
+        $request->session()->regenerate();
 
         return response()->json(['message' => 'Login exitoso']);
     }
