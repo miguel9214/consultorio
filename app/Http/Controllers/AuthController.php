@@ -11,6 +11,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -92,9 +93,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'correo o contraseña incorrectos'],422);
         }
 
-        $request->session()->regenerate();
+        $token =JWTAuth::fromUser(Auth::user());
 
-        return response()->json(['message' => 'Login exitoso']);
+        return response()->json(['message' => 'Login exitoso','accessToken'=>$token]);
     }
 
     public function logout(Request $request)
