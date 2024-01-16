@@ -18,9 +18,11 @@ class EpsController extends Controller
         return response()->json(['message' => 'List of EPS', 'data' => $epsList]);
     }
 
-    public function create()
+    public function indexPublic()
     {
-        //
+        $epsList = Eps::all();
+
+        return response()->json(['message' => 'List of EPS', 'data' => $epsList]);
     }
 
     public function show(string $id)
@@ -59,10 +61,6 @@ class EpsController extends Controller
         } catch (QueryException $e) {
             return response()->json(['message' => 'Error creating EPS: ' . $e->getMessage()], 500);
         }
-    }
-
-    public function edit(string $id)
-    {
     }
 
     public function update(Request $request, string $id)

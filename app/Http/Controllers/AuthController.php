@@ -34,15 +34,6 @@ class AuthController extends Controller
             // 'password_confirmation' => 'required|string|confirmed',
         ]);
 
-        // Inicio de la Transacción (Db::beginTransaction): Se inicia una transacción antes de realizar cualquier operación que forme parte de ella.
-
-        // Operaciones en la Base de Datos: Se realizan varias operaciones de lectura o escritura en la base de datos como parte de la transacción.
-
-        // **Confirmación de la Transacción (Db::commit): Si todas las operaciones se han completado con éxito, se utiliza la función Db::commit` para confirmar la transacción. Esto significa que todas las operaciones realizadas en la transacción se guardan permanentemente en la base de datos.
-
-        // **Rollback de la Transacción (Db::rollBack): Si algo sale mal en cualquier punto de la transacción, puedes utilizar la función Db::rollBack` para deshacer todas las operaciones realizadas desde el inicio de la transacción, llevando la base de datos de nuevo a su estado original.
-
-
         DB::beginTransaction();
 
         try {
@@ -93,7 +84,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'correo o contraseña incorrectos'],422);
         }
 
-        $token =JWTAuth::fromUser(Auth::user());
+        $token = JWTAuth::fromUser(Auth::user());
 
         return response()->json(['message' => 'Login exitoso','accessToken'=>$token]);
     }
