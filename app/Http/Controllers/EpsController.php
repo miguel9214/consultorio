@@ -95,7 +95,7 @@ class EpsController extends Controller
         $eps = Eps::find($id);
 
         if (!$eps) {
-            return response()->json(['message' => 'EPS not found']);
+            return response()->json(['message' => 'EPS not delete']);
         }
 
         $eps->delete();

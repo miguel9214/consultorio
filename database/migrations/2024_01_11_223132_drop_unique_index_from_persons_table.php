@@ -28,7 +28,6 @@ class DropUniqueIndexFromPersonsTable extends Migration
     {
         // Vuelve a agregar el índice único a la columna 'document' en la tabla 'persons'
         Schema::table('persons', function (Blueprint $table) {
-            $table->unique('document');
         });
     }
 }

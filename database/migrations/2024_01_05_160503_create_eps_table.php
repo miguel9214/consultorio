@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('contract_start_date');
             $table->date('contract_end_date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

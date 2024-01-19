@@ -28,7 +28,6 @@ class DropUniqueIndexFromUsersTable extends Migration
     {
         // Vuelve a agregar el índice único a la columna 'email' en la tabla 'users'
         Schema::table('users', function (Blueprint $table) {
-            $table->unique('email');
         });
     }
 }
