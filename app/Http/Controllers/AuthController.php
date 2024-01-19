@@ -94,4 +94,19 @@ class AuthController extends Controller
         Auth::logout();
         return response()->json(['message' => 'Sesión creada correctamente']);
     }
+
+    public function userProfile(){
+        
+        try {
+
+            $user = auth()->user();
+    
+
+            return response()->json(['user' => $user]);
+        } catch (\Exception $e) {
+
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+    }
 }

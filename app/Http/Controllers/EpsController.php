@@ -84,7 +84,7 @@ class EpsController extends Controller
             $eps->contract_end_date = $request->contract_end_date;
             $eps->save();
 
-            return response()->json(['message' => 'EPS update successfully']);
+            return response()->json(['message' => 'EPS updated successfully']);
         } catch (QueryException $e) {
             return response()->json(['message' => 'Error updating EPS: ' . $e->getMessage()], 500);
         }

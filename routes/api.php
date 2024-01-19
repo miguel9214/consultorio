@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'auth:api'], function () {
 
-    Route::get('user-profile', [AuthController::class, 'userProfile']);
+
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('user-profile', [AuthController::class, 'userProfile']);
     
     //EPS
     Route::get('eps', [EpsController::class, 'index']);
@@ -30,3 +31,4 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('users', [AuthController::class, 'allUsers']);
 
 Route::get('epsPublic', [EpsController::class, 'indexPublic']);
+
