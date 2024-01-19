@@ -92,21 +92,21 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return response()->json(['message' => 'Sesión creada correctamente']);
+        return response()->json(['message' => 'Sesión cerrada correctamente']);
     }
 
-    public function userProfile(){
-        
-        try {
+    public function userProfile()
+{
+    try {
+        $user = auth()->user();
+        $person = Person::find($user->id);
+        return response()->json(['user' => $user, 'person'=>$person]);
+    } catch (\Exception $e) {
 
-            $user = auth()->user();
-    
-
-            return response()->json(['user' => $user]);
-        } catch (\Exception $e) {
-
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
+
+
 }
