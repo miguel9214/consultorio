@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('user-profile', [AuthController::class, 'userProfile']);
+    Route::post('userProfile', [AuthController::class, 'userProfile']);
 });
 
 Route::apiResource("v1/persons", PersonController::class);

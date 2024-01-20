@@ -15,11 +15,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+
+
     public function register(Request $request)
     {
         $request->validate([
             'type_document' => 'required|string',
-            'document' => 'required|unique:persons,document,NULL,id,type_document,' .$request->type_document,
+            'document' => 'required|unique:persons,document,NULL,id,type_document,' . $request->type_document,
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'sex' => 'required|string',
@@ -80,13 +82,12 @@ class AuthController extends Controller
         ]);
 
 
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
-            return response()->json(['message' => 'correo o contraseña incorrectos'],422);
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $token = JWTAuth::fromUser(Auth::user());
+        return $this->respondWithToken($token);
 
-        return response()->json(['message' => 'Login exitoso','accessToken'=>$token]);
     }
 
     public function logout(Request $request)
@@ -96,17 +97,26 @@ class AuthController extends Controller
     }
 
     public function userProfile()
-{
-    try {
-        $user = auth()->user();
-        $person = Person::find($user->id);
-        return response()->json(['user' => $user, 'person'=>$person]);
-    } catch (\Exception $e) {
+    {
+        try {
+            return response()->json(auth('api')->user());
+        } catch (\Exception $e) {
 
-        return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-}
 
+    public function refresh()
+    {
+        return $this->respondWithToken(auth('api')->refresh());
+    }
 
-
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
+    }
 }
