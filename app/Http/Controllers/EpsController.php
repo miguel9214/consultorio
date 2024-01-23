@@ -13,6 +13,7 @@ class EpsController extends Controller
 {
     public function index()
     {
+
         $epsList = Eps::all();
 
         return response()->json(['message' => 'List of EPS', 'data' => $epsList]);
