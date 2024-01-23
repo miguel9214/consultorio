@@ -19,14 +19,14 @@ class MedicoController extends Controller
     {
         $medicosList = Medico::all();
 
-        return response()->json(['message' => 'List of Medicos', 'data' => $medicosList]);
+        return response()->json(['message' => 'List of Doctors', 'data' => $medicosList]);
     }
 
     public function indexPublic()
     {
         $medicosList = Medico::all();
 
-        return response()->json(['message' => 'List of Medicos', 'data' => $medicosList]);
+        return response()->json(['message' => 'List of Doctors', 'data' => $medicosList]);
     }
 
     public function show(string $id)
@@ -34,9 +34,9 @@ class MedicoController extends Controller
         $medicos = Medico::find($id);
 
         if ($medicos) {
-            return response()->json(['message' => 'Medicos found', 'data' => $medicos]);
+            return response()->json(['message' => 'Doctors found', 'data' => $medicos]);
         } else {
-            return response()->json(['message' => 'Medicos not found']);
+            return response()->json(['message' => 'Doctors not found']);
         }
     }
 
@@ -90,10 +90,10 @@ class MedicoController extends Controller
             $medicos->save();
 
             DB::commit();
-            return response()->json(['message' => 'Medicos created successfully']);
+            return response()->json(['message' => 'Doctors created successfully']);
         } catch (QueryException $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Error creating Medicos: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Error creating Doctors: ' . $e->getMessage()], 500);
         }
     }
 
@@ -140,9 +140,9 @@ class MedicoController extends Controller
             $medicos->speciality = $request->speciality;
             $medicos->save();
 
-            return response()->json(['message' => 'Medicos updated successfully']);
+            return response()->json(['message' => 'Doctors updated successfully']);
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Error updating Medicos: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Error updating Doctors: ' . $e->getMessage()], 500);
         }
     }
 
@@ -151,11 +151,11 @@ class MedicoController extends Controller
         $medicos = Medico::find($id);
 
         if (!$medicos) {
-            return response()->json(['message' => 'Medicos not delete']);
+            return response()->json(['message' => 'Doctors not delete']);
         }
 
         $medicos->delete();
 
-        return response()->json(['message' => 'Medicos deleted successfully']);
+        return response()->json(['message' => 'Doctors deleted successfully']);
     }
 }

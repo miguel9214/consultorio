@@ -67,7 +67,7 @@ class AuthController extends Controller
             $patients->save();
 
             DB::commit();
-            return response()->json(['message' => 'Usuario created successfully']);
+            return response()->json(['message' => 'Users created successfully']);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['message' => $th->getMessage()], 422);
@@ -93,7 +93,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return response()->json(['message' => 'Sesión cerrada correctamente']);
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     public function userProfile()
@@ -114,10 +114,8 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            // 'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'user'=>auth('api')->user(),
+                'access_token' => $token,
+                'user'=>auth('api')->user(),
         ]);
     }
 }
