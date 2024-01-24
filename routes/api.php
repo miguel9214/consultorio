@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ConsultationtypeController;
 use App\Http\Controllers\EpsController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PersonController;
@@ -9,12 +10,21 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'auth:api'], function () {
+
+    //CONSULTATION_TYPE
+    Route::get('consultation_type', [ConsultationtypeController::class, 'index']);
+    Route::get('consultation_type/{id}', [ConsultationtypeController::class, 'show']);
+    Route::post('consultation_type', [ConsultationtypeController::class, 'store']);
+    Route::put('consultation_type/{id}', [ConsultationtypeController::class, 'update']);
+    Route::delete('consultation_type/{id}', [ConsultationtypeController::class, 'destroy']);
+
+    //EPS
     Route::get('eps', [EpsController::class, 'index']);
     Route::get('eps/{id}', [EpsController::class, 'show']);
     Route::post('eps', [EpsController::class, 'store']);
     Route::put('eps/{id}', [EpsController::class, 'update']);
     Route::delete('eps/{id}', [EpsController::class, 'destroy']);
-    
+
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('userProfile', [AuthController::class, 'userProfile']);
 });
@@ -29,7 +39,7 @@ Route::get('users', [AuthController::class, 'allUsers']);
 
 Route::get('epsPublic', [EpsController::class, 'indexPublic']);
 
-//EPS
+
 
 //MEDICO
 Route::get('medico', [MedicoController::class, 'index']);
