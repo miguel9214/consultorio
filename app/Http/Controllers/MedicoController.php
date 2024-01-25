@@ -17,9 +17,16 @@ class MedicoController extends Controller
 {
     public function index()
     {
-        $medicosList = Medico::all();
+        $user = auth('api')->user();
 
-        return response()->json(['message' => 'List of Doctors', 'data' => $medicosList]);
+        if ($user) {
+
+            $medicosList = Medico::with('person.user')->get();
+
+            return response()->json(['message' => 'List of doctors', 'data' => $medicosList]);
+        } else {
+            return response()->json(['message' => 'Doctors not found']);
+        }
     }
 
     public function indexPublic()
