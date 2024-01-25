@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConsultationtypeController;
+use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\EpsController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PersonController;
@@ -47,3 +48,7 @@ Route::get('medico/{id}', [MedicoController::class, 'show']);
 Route::post('medico', [MedicoController::class, 'store']);
 Route::put('medico/{id}', [MedicoController::class, 'update']);
 Route::delete('medico/{id}', [MedicoController::class, 'destroy']);
+
+
+Route::get('consultation', [ConsultationController::class, 'index']);
+Route::post('consultation', [ConsultationController::class, 'store']);
