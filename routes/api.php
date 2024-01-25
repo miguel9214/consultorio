@@ -19,6 +19,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('consultation_type/{id}', [ConsultationtypeController::class, 'update']);
     Route::delete('consultation_type/{id}', [ConsultationtypeController::class, 'destroy']);
 
+    //CONSULTATION
+    Route::get('consultation', [ConsultationController::class, 'index']);
+    Route::get('consultation/{id}', [ConsultationController::class, 'show']);
+    Route::post('consultation', [ConsultationController::class, 'store']);
+    Route::put('consultation/{id}', [ConsultationController::class, 'update']);
+    Route::delete('consultation/{id}', [ConsultationController::class, 'destroy']);
+
     //EPS
     Route::get('eps', [EpsController::class, 'index']);
     Route::get('eps/{id}', [EpsController::class, 'show']);
@@ -48,7 +55,3 @@ Route::get('medico/{id}', [MedicoController::class, 'show']);
 Route::post('medico', [MedicoController::class, 'store']);
 Route::put('medico/{id}', [MedicoController::class, 'update']);
 Route::delete('medico/{id}', [MedicoController::class, 'destroy']);
-
-
-Route::get('consultation', [ConsultationController::class, 'index']);
-Route::post('consultation', [ConsultationController::class, 'store']);
