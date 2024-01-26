@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\Codification;
 use Illuminate\Database\QueryException;
-
+use Illuminate\Support\Facades\Auth;
 
 class ConsultationtypeController extends Controller
 {
@@ -15,7 +15,7 @@ class ConsultationtypeController extends Controller
     {
 
         $ConsultationTypeList = Consultationtype::all();
-
+        
         return response()->json(['message' => 'List of Consultation Type', 'data' => $ConsultationTypeList]);
     }
 

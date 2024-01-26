@@ -16,7 +16,28 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
 
+    public function indexPersonDoctor()
+    {
+        $data = DB::table("doctors as d")
+            ->join("persons as p", "p.id", "d.person_id")
+            ->select(
+                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
+            )->get();
+    
+        return response()->json(['message' => 'List of Persons', 'data' => $data]);
+    }
 
+    public function indexPersonPatient()
+    {
+        $data = DB::table("patients as pt")
+            ->join("persons as p", "p.id", "pt.person_id")
+            ->select(
+                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as patient"),
+            )->get();
+    
+        return response()->json(['message' => 'List of Persons', 'data' => $data]);
+    }
+    
     public function register(Request $request)
     {
         $request->validate([
@@ -33,7 +54,6 @@ class AuthController extends Controller
             'state' => 'required|string',
             'neighborhood' => 'required|string',
             'password' => 'required',
-            // 'password_confirmation' => 'required|string|confirmed',
         ]);
 
         DB::beginTransaction();
@@ -105,11 +125,6 @@ class AuthController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-    // public function refresh()
-    // {
-    //     return $this->respondWithToken(auth('api')->refresh());
-    // }
 
     protected function respondWithToken($token)
     {

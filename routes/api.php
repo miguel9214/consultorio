@@ -41,15 +41,14 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::apiResource("v1/persons", PersonController::class);
 
 Route::post('register', [AuthController::class, 'register']);
+Route::get('personDoctor', [AuthController::class, 'indexPersonDoctor']);
+Route::get('personPatient', [AuthController::class, 'indexPersonPatient']);
 
 Route::post('login', [AuthController::class, 'login']);
 
 Route::get('users', [AuthController::class, 'allUsers']);
 
 Route::get('epsPublic', [EpsController::class, 'indexPublic']);
-
-// Route::get('consultationtypeindexPublic', [ConsultationtypeController::class, 'indexPublic']);
-
 
 //MEDICO
 Route::get('medico', [MedicoController::class, 'index']);
