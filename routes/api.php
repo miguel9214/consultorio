@@ -12,19 +12,20 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'auth:api'], function () {
 
-    //CONSULTATION_TYPE
-    Route::get('consultation_type', [ConsultationtypeController::class, 'index']);
-    Route::get('consultation_type/{id}', [ConsultationtypeController::class, 'show']);
-    Route::post('consultation_type', [ConsultationtypeController::class, 'store']);
-    Route::put('consultation_type/{id}', [ConsultationtypeController::class, 'update']);
-    Route::delete('consultation_type/{id}', [ConsultationtypeController::class, 'destroy']);
-
+    
     //CONSULTATION
     Route::get('consultation', [ConsultationController::class, 'index']);
     Route::get('consultation/{id}', [ConsultationController::class, 'show']);
     Route::post('consultation', [ConsultationController::class, 'store']);
     Route::put('consultation/{id}', [ConsultationController::class, 'update']);
     Route::delete('consultation/{id}', [ConsultationController::class, 'destroy']);
+    
+    //CONSULTATION_TYPE
+    Route::get('consultationType', [ConsultationtypeController::class, 'index']);
+    Route::get('consultationType/{id}', [ConsultationtypeController::class, 'show']);
+    Route::post('consultationType', [ConsultationtypeController::class, 'store']);
+    Route::put('consultationType/{id}', [ConsultationtypeController::class, 'update']);
+    Route::delete('consultationType/{id}', [ConsultationtypeController::class, 'destroy']);
 
     //EPS
     Route::get('eps', [EpsController::class, 'index']);
@@ -47,6 +48,7 @@ Route::get('users', [AuthController::class, 'allUsers']);
 
 Route::get('epsPublic', [EpsController::class, 'indexPublic']);
 
+// Route::get('consultationtypeindexPublic', [ConsultationtypeController::class, 'indexPublic']);
 
 
 //MEDICO

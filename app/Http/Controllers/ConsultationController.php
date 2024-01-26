@@ -18,10 +18,25 @@ class ConsultationController extends Controller
 {
     public function index()
     {
-        $consultationList = Consultation::all();
-
-        return response()->json(['message' => 'List of Consultation', 'data' => $consultationList]);
+        $data = DB::table("consultations as c")
+            ->join("consultation_types as tc", "tc.id", "c.consultation_type_id")
+            ->join("doctors as d", "d.id", "c.doctor_id")
+            ->join("persons as p", "p.id", "d.person_id")
+            ->join("patients as pc", "pc.id", "c.pacient_id")
+            ->join("persons as ps", "ps.id", "pc.person_id")
+            ->select(
+                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
+                DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as paciente"),
+                "tc.name as tipo_consulta",
+                "c.date as fecha",
+                "c.observation as observacion",
+                "c.status as estado"
+            )
+            ->get();
+    
+        return response()->json(['message' => 'List of Consultation', 'data' => $data]);
     }
+    
 
     public function indexPublic()
     {
