@@ -17,16 +17,28 @@ class MedicoController extends Controller
 {
     public function index()
     {
-        $user = auth('api')->user();
+        $data = DB::table("persons as ps")
+            ->join("users as u", "ps.user_id", "u.id")
+            ->join("doctors as ds", "ps.id", "ds.person_id")
+            ->select(
+                "ds.id as id",
+                "ps.type_document as tipo_documento",
+                "ps.document as documento",
+                "ps.first_name as nombre",
+                "ps.last_name as apellido",
+                "ps.sex as sexo",
+                "ps.phone as telefono",
+                "ps.birthdate as fecha_nacimiento",
+                "ps.address as direccion",
+                "ps.city as ciudad",
+                "ps.state as estado",
+                "ps.neighborhood as barrio",
+                "ds.speciality as especialidad",
+                "u.email as email",
+            )->get();
 
-        if ($user) {
 
-            $medicosList = Medico::with('person.user')->get();
-
-            return response()->json(['message' => 'List of doctors', 'data' => $medicosList]);
-        } else {
-            return response()->json(['message' => 'Doctors not found']);
-        }
+        return response()->json(['message' => 'List of Doctors', 'data' => $data]);
     }
 
     public function indexPublic()
