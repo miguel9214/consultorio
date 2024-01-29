@@ -50,10 +50,29 @@ class MedicoController extends Controller
 
     public function show(string $id)
     {
-        $medicos = Medico::find($id);
+        $medico = DB::table("persons as ps")
+        ->join("users as u", "ps.user_id", "u.id")
+        ->join("doctors as ds", "ps.id", "ds.person_id")
+        ->where("ps.id", $id)
+        ->select(
+            "ds.id as id",
+            "ps.type_document as tipo_documento",
+            "ps.document as documento",
+            "ps.first_name as nombre",
+            "ps.last_name as apellido",
+            "ps.sex as sexo",
+            "ps.phone as telefono",
+            "ps.birthdate as fecha_nacimiento",
+            "ps.address as direccion",
+            "ps.city as ciudad",
+            "ps.state as estado",
+            "ps.neighborhood as barrio",
+            "ds.speciality as especialidad",
+            "u.email as email"
+        )->first();
 
-        if ($medicos) {
-            return response()->json(['message' => 'Doctors found', 'data' => $medicos]);
+        if ($medico) {
+            return response()->json(['message' => 'Doctors found', 'data' => $medico]);
         } else {
             return response()->json(['message' => 'Doctors not found']);
         }
@@ -132,7 +151,6 @@ class MedicoController extends Controller
             'city' => 'required|string',
             'state' => 'required|string',
             'neighborhood' => 'required|string',
-            'password' => 'required',
         ]);
 
         try {
@@ -168,8 +186,10 @@ class MedicoController extends Controller
     public function destroy(string $id)
     {
         $medicos = Medico::find($id);
+        $persona = Person::find($id);
+        $user = User::find($id);
 
-        if (!$medicos) {
+        if (!$medicos && !$persona && !$user) {
             return response()->json(['message' => 'Doctors not delete']);
         }
 
