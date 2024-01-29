@@ -16,22 +16,24 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends Controller
 {
 
-    public function indexPersonDoctor()
+    public function doctor()
     {
         $data = DB::table("doctors as d")
             ->join("persons as p", "p.id", "d.person_id")
             ->select(
+                "d.id",
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
             )->get();
     
         return response()->json(['message' => 'List of Persons', 'data' => $data]);
     }
 
-    public function indexPersonPatient()
+    public function pacient()
     {
         $data = DB::table("patients as pt")
             ->join("persons as p", "p.id", "pt.person_id")
             ->select(
+                "pt.id",
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as patient"),
             )->get();
     

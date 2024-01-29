@@ -27,6 +27,7 @@ class ConsultationController extends Controller
             ->select(
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
                 DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as paciente"),
+                "c.id",                
                 "tc.name as tipo_consulta",
                 "c.date as fecha",
                 "c.observation as observacion",
@@ -77,6 +78,8 @@ class ConsultationController extends Controller
             $consultation->doctor_id = $request->doctor_id;
             $consultation->pacient_id = $request->pacient_id;          
             $consultation->created_by_user = Auth::id();
+            $consultation->updated_by_user = Auth::id();
+
             $consultation->save();
 
             return response()->json(['message' => 'Consultation created successfully']);
