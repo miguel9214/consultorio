@@ -10,6 +10,13 @@ class Specialty extends Model
     use HasFactory;
 
 
+    protected $table = 'specialties';
+
+    protected $fillable = [
+        'name',
+    ];
+
+
     public function medicos()
     {
         return $this->belongsToMany(Medico::class, 'doctor_speciality', 'speciality_id', 'doctor_id');

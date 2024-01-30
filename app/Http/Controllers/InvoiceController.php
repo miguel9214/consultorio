@@ -14,7 +14,7 @@ class InvoiceController extends Controller
     public function index()
     {
 
-        $invoicesList = Invoices::all();
+        $invoicesList = Invoices::all(); 
 
         return response()->json(['message' => 'List of Invoices', 'data' => $invoicesList]);
     }

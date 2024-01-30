@@ -7,6 +7,8 @@ use App\Http\Controllers\EpsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\SpecialityController;
+use App\Models\Specialty;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -52,6 +54,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('userProfile', [AuthController::class, 'userProfile']);
 });
+
+//ESPECIALIDAD
+Route::get('speciality', [SpecialityController::class, 'index']);
+Route::get('speciality/{id}', [SpecialityController::class, 'show']);
+Route::post('speciality', [SpecialityController::class, 'store']);
+Route::put('speciality/{id}', [SpecialityController::class, 'update']);
+Route::delete('speciality/{id}', [SpecialityController::class, 'destroy']);
+
 
 Route::apiResource("v1/persons", PersonController::class);
 
