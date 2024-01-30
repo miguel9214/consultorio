@@ -30,6 +30,7 @@ class ConsultationController extends Controller
                 "c.id",                
                 "tc.name as tipo_consulta",
                 "c.date as fecha",
+                "c.hour as hora",
                 "c.observation as observacion",
                 "c.status as estado"
             )
@@ -63,6 +64,7 @@ class ConsultationController extends Controller
             'observation' => 'required|string',
             'status' => 'required|string',
             'date' => 'required|string',
+            'hour' => 'required|string',
             'consultation_type_id' => 'required|int',
             'doctor_id' => 'required|int',
             'pacient_id' => 'required|int'
@@ -73,7 +75,8 @@ class ConsultationController extends Controller
             $consultation = new Consultation();
             $consultation->observation = $request->observation;
             $consultation->status = $request->status;
-            $consultation->date = $request->date;   
+            $consultation->date = $request->date; 
+            $consultation->hour = $request->hour;   
             $consultation->consultation_type_id = $request->consultation_type_id;
             $consultation->doctor_id = $request->doctor_id;
             $consultation->pacient_id = $request->pacient_id;          
@@ -94,6 +97,7 @@ class ConsultationController extends Controller
             'observation' => 'required|string',
             'status' => 'required|string',
             'date' => 'required|string',
+            'hour' => 'required|string',
             'consultation_type_id' => 'required|int',
             'doctor_id' => 'required|int',
             'pacient_id' => 'required|int'
@@ -103,7 +107,8 @@ class ConsultationController extends Controller
             $consultation = Consultation::find($id);
             $consultation->observation = $request->observation;
             $consultation->status = $request->status;
-            $consultation->date = $request->date;   
+            $consultation->date = $request->date; 
+            $consultation->hour = $request->hour;   
             $consultation->consultation_type_id = $request->consultation_type_id;
             $consultation->doctor_id = $request->doctor_id;
             $consultation->pacient_id = $request->pacient_id;          
