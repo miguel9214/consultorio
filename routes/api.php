@@ -55,7 +55,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('userProfile', [AuthController::class, 'userProfile']);
 });
 
-//ESPECIALIDAD
+//SPECIALITY
 Route::get('speciality', [SpecialityController::class, 'index']);
 Route::get('speciality/{id}', [SpecialityController::class, 'show']);
 Route::post('speciality', [SpecialityController::class, 'store']);
