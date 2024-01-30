@@ -42,7 +42,7 @@ class EpsController extends Controller
         $request->validate([
             'name' => 'required|string',
             'address' => 'required|string',
-            'phone' => 'required|string',
+            'phone' => 'required|numeric',
             'code' => 'required|string',
             'contract_start_date' => 'required|date',
             'contract_end_date' => 'required|date',
@@ -69,7 +69,7 @@ class EpsController extends Controller
         $request->validate([
             'name' => 'required|string',
             'address' => 'required|string',
-            'phone' => 'required|string',
+            'phone' => 'required|numeric',
             'code' => 'required|string',
             'contract_start_date' => 'required|date',
             'contract_end_date' => 'required|date',

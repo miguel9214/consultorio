@@ -41,7 +41,7 @@ class ConsultationtypeController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'price' => 'required|string',
+            'price' => 'required|numeric',
         ]);
 
         try {
@@ -60,7 +60,7 @@ class ConsultationtypeController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'price' => 'required|string',
+            'price' => 'required|numeric',
         ]);
 
         try {
