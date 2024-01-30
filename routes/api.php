@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConsultationtypeController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\EpsController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PersonController;
 use GuzzleHttp\Middleware;
@@ -33,6 +34,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('eps', [EpsController::class, 'store']);
     Route::put('eps/{id}', [EpsController::class, 'update']);
     Route::delete('eps/{id}', [EpsController::class, 'destroy']);
+
+    //FACTURA
+    Route::get('invoice', [InvoiceController::class, 'index']);
+    Route::get('invoice/{id}', [InvoiceController::class, 'show']);
+    Route::post('invoice', [InvoiceController::class, 'store']);
+    Route::put('invoice/{id}', [InvoiceController::class, 'update']);
+    Route::delete('invoice/{id}', [InvoiceController::class, 'destroy']);
 
     //MEDICO
     Route::get('medico', [MedicoController::class, 'index']);
