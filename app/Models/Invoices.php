@@ -14,11 +14,13 @@ class Invoices extends Model
 
     protected $fillable = [
         'invoice_number',
+        'start_date',
         'due_date',
         'total_amount',
         'taxes',
         'discounts',
         'amount_paid',
+        'status',
         'consultation_id'
     ];
 }
