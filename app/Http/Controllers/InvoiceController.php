@@ -7,16 +7,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\Codification;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class InvoiceController extends Controller
 {
     public function index()
     {
-
-        $invoicesList = Invoices::all(); 
-
-        return response()->json(['message' => 'List of Invoices', 'data' => $invoicesList]);
+        $data = DB::table("invoices as in")
+            ->join("consultations as c", "c.id", "in.consultation_id")
+            ->join("patients as pts", "pts.id", "c.pacient_id")
+            ->join("persons as p", "p.id", "pts.person_id")
+            ->join("users as us", "us.id", "p.user_id")
+            ->select(
+                "in.id",                
+                "in.invoice_number as factura",
+                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as paciente"),
+                "us.email as correo",
+                "in.start_date as fecha",
+                "in.amount_paid as pagar",
+                "in.status as estado"
+            )->get();
+    
+        return response()->json(['message' => 'List of Invoices', 'data' => $data]);
     }
 
     public function indexPublic()
