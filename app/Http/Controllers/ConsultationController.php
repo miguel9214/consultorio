@@ -33,7 +33,7 @@ class ConsultationController extends Controller
                 "c.date as fecha",
                 "c.hour as hora",
                 "c.observation as observacion",
-                "c.status as estado"
+                "c.status as estado",
             )
             ->get();
     

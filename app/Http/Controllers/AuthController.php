@@ -32,8 +32,10 @@ class AuthController extends Controller
     {
         $data = DB::table("patients as pt")
             ->join("persons as p", "p.id", "pt.person_id")
+            ->join("users as us", "us.id", "p.user_id")
             ->select(
                 "pt.id",
+                "us.email as correo",
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as patient"),
             )->get();
     
