@@ -26,73 +26,67 @@ class ConsultationController extends Controller
             ->join("patients as pc", "pc.id", "c.pacient_id")
             ->join("persons as ps", "ps.id", "pc.person_id")
             ->join("users as us", "us.id", "ps.user_id")
-            ->join("invoices as in", "c.id", "in.consultation_id")
             ->select(
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
                 DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as paciente"),
-                "c.id",                
+                "tc.name as tipo_consulta",
                 "c.date as fecha",
                 "c.hour as hora",
                 "c.observation as observacion",
                 "c.status as estado",
-                "tc.name as tipo_consulta",
-                "ps.address as direccion",
-                "us.email as correo",
-                "in.invoice_number as invoice_number",
-                "in.start_date as start_date",
-                "in.due_date as due_date",
-                "in.status as status",
-                "in.total_amount as total_amount",
-                "in.taxes as taxes",
-                "in.discounts as discounts",
-                "in.amount_paid as amount_paid",
+                "c.id as id"
             )
             ->get();
     
-        return response()->json(['message' => 'List of Consultation', 'data' => $data]);
+        return response()->json(['message' => 'List of Consultation INDEX', 'data' => $data]);
     }
     
-
-    public function indexPublic()
-    {
-        $consultationList = Consultation::all();
-
-        return response()->json(['message' => 'List of Consultation', 'data' => $consultationList]);
-    }
+    // public function show(string $id)
+    // {
+    //     $data = DB::table("consultations as c")
+    //         ->join("consultation_types as tc", "tc.id", "c.consultation_type_id")
+    //         ->join("doctors as d", "d.id", "c.doctor_id")
+    //         ->join("persons as p", "p.id", "d.person_id")
+    //         ->join("patients as pc", "pc.id", "c.pacient_id")
+    //         ->join("persons as ps", "ps.id", "pc.person_id")
+    //         ->join("users as us", "us.id", "ps.user_id")
+    //         ->join("invoices as in", "c.id", "in.consultation_id")
+    //         ->select(
+    //             DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
+    //             DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as paciente"),
+    //             "c.id",                
+    //             "c.date as fecha",
+    //             "c.hour as hora",
+    //             "c.observation as observacion",
+    //             "c.status as estado",
+    //             "tc.name as tipo_consulta",
+    //             "tc.price as price",
+    //             "ps.address as direccion",
+    //             "ps.phone as telefono",
+    //             "us.email as correo",
+    //             "in.invoice_number as invoice_number",
+    //             "in.start_date as start_date",
+    //             "in.due_date as due_date",
+    //             "in.status as status",
+    //             "in.total_amount as total_amount",
+    //             "in.taxes as taxes",
+    //             "in.discounts as discounts",
+    //             "in.amount_paid as amount_paid",
+    //         )
+    //         ->get();
+    
+    //     return response()->json(['message' => 'Consultation Found in ShowlIST', 'data' => $data]);
+    // }
 
     public function show(string $id)
     {
-        $data = DB::table("consultations as c")
-            ->join("consultation_types as tc", "tc.id", "c.consultation_type_id")
-            ->join("doctors as d", "d.id", "c.doctor_id")
-            ->join("persons as p", "p.id", "d.person_id")
-            ->join("patients as pc", "pc.id", "c.pacient_id")
-            ->join("persons as ps", "ps.id", "pc.person_id")
-            ->join("users as us", "us.id", "ps.user_id")
-            ->join("invoices as in", "c.id", "in.consultation_id")
-            ->select(
-                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
-                DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as paciente"),
-                "c.id",                
-                "c.date as fecha",
-                "c.hour as hora",
-                "c.observation as observacion",
-                "c.status as estado",
-                "tc.name as tipo_consulta",
-                "ps.address as direccion",
-                "us.email as correo",
-                "in.invoice_number as invoice_number",
-                "in.start_date as start_date",
-                "in.due_date as due_date",
-                "in.status as status",
-                "in.total_amount as total_amount",
-                "in.taxes as taxes",
-                "in.discounts as discounts",
-                "in.amount_paid as amount_paid",
-            )
-            ->get();
-    
-        return response()->json(['message' => 'Consultation Found in Show', 'data' => $data]);
+        $Consultation = Consultation::find($id);
+
+        if ($Consultation) {
+            return response()->json(['message' => 'Consultation show found', 'data' => $Consultation]);
+        } else {
+            return response()->json(['message' => 'Consultation show not found']);
+        }
     }
 
     public function store(Request $request)
