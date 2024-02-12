@@ -18,7 +18,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //CONSULTATION
     Route::get('consultation', [ConsultationController::class, 'index']);
-    Route::get('consultationInvoice', [ConsultationController::class, 'indexConsultationInvoice']);
+    Route::get('consultation/Invoice/{id}', [ConsultationController::class, 'indexConsultationInvoice']);
     Route::get('consultation/{id}', [ConsultationController::class, 'show']);
     Route::post('consultation', [ConsultationController::class, 'store']);
     Route::put('consultation/{id}', [ConsultationController::class, 'update']);

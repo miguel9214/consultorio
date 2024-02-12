@@ -40,7 +40,7 @@ class ConsultationController extends Controller
         return response()->json(['message' => 'List of Consultation', 'data' => $data]);
     }
 
-    public function indexConsultationInvoice()
+    public function indexConsultationInvoice(string $id)
     {
         $data = DB::table("consultations as c")
             ->join("consultation_types as tc", "tc.id", "c.consultation_type_id")
@@ -48,32 +48,39 @@ class ConsultationController extends Controller
             ->join("persons as p", "p.id", "d.person_id")
             ->join("patients as pc", "pc.id", "c.pacient_id")
             ->join("persons as ps", "ps.id", "pc.person_id")
-            ->join("users as u", "ps.id", "ps.user_id")
-            ->join("invoices as i", "i.id", "i.consultation_id")
+            ->join("users as u", "u.id", "ps.user_id")
+            ->join("invoices as i", "c.id", "i.consultation_id")
+            ->where('c.id', $id)
             ->select(
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
+                DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as pacient"),
                 "c.id",
-                DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as paciente"),
-                "c.date as fecha_consult",
-                "c.hour as hora",
-                "c.observation as observacion",
-                "c.status as estado_consulta",
-                "tc.name as tipo_consulta",
-                "ps.adress as direccion",
-                "ps.phone as telefono",
-                "u.email as correo",
-                "i.invoice_number as num_fact",
-                "i.start_date as fecha_i",
-                "i.due_date as fecha_f",
-                "i.status as estado_fact",
-                "i.total_amount as cantidad_total",
-                "i.taxes as cantidad_pagada",
-                "i.amount_paid as cantidad_pagada",
-            )
-            ->get();
+                "c.date as date_consult",
+                "c.hour as hour",
+                "c.observation as observation",
+                "c.status as status_consult",
+                "tc.name as type_consult",
+                "tc.price as price",
+                "ps.address as address",
+                "ps.phone as phone",
+                "u.email as email",
+                "i.invoice_number as invoice_number",
+                "i.start_date as start_date",
+                "i.due_date as due_date",
+                "i.status as status_invoice",
+                "i.total_amount as total_amount",
+                "i.discounts as discounts",
+                "i.taxes as taxes",
+                "i.amount_paid as amount_paid",
+            )->first();
 
-        return response()->json(['message' => 'List of invoiceConsultation', 'data' => $data]);
+        if (!$data) {
+            return response()->json(['error' => 'InvoiceConsultation not found'], 404);
+        }
+
+        return response()->json(['message' => 'InvoiceConsultation found', 'data' => $data]);
     }
+
 
     public function show(string $id)
     {
