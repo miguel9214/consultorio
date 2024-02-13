@@ -13,7 +13,6 @@ class Medico extends Model
     protected $table = 'doctors';
 
     protected $fillable = [
-        'speciality',
         'person_id'
     ];
 

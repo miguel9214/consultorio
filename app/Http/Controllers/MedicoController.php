@@ -33,7 +33,6 @@ class MedicoController extends Controller
                 "ps.city as ciudad",
                 "ps.state as estado",
                 "ps.neighborhood as barrio",
-                "ds.speciality as especialidad",
                 "u.email as email",
             )->get();
 
@@ -67,7 +66,7 @@ class MedicoController extends Controller
             "ps.city as ciudad",
             "ps.state as estado",
             "ps.neighborhood as barrio",
-            "ds.speciality as especialidad",
+            // "ds.speciality as especialidad",
             "u.email as email"
         )->first();
 
@@ -85,7 +84,6 @@ class MedicoController extends Controller
             'document' => 'required|numeric',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'speciality' => 'required|string',
             'sex' => 'required|string',
             'phone' => 'required|numeric',
             'birthdate' => 'required|date',
@@ -123,9 +121,23 @@ class MedicoController extends Controller
             $person->save();
 
             $medicos = new Medico();
-            $medicos->speciality = $request->speciality;
             $medicos->person_id = $person->id;
             $medicos->save();
+
+
+            foreach ($request->specialities as $speciality) {
+                // dd([
+                //     'doctor_id'=>$medicos->id,
+                //     'speciality_id'=>$speciality['id'],
+                // ]);
+
+                DB::table('doctor_specialties')->insert([
+                    'doctor_id'=>$medicos->id,
+                    'speciality_id'=>$speciality['id'],
+                ]);
+            }
+
+
 
             DB::commit();
             return response()->json(['message' => 'Doctors created successfully']);
@@ -142,7 +154,6 @@ class MedicoController extends Controller
             'document' => 'required|numeric',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'speciality' => 'required|string',
             'sex' => 'required|string',
             'phone' => 'required|numeric',
             'birthdate' => 'required|date',
@@ -174,7 +185,6 @@ class MedicoController extends Controller
             $person->save();
 
             $medicos = Medico::find($id);
-            $medicos->speciality = $request->speciality;
             $medicos->save();
 
             return response()->json(['message' => 'Doctors updated successfully']);
@@ -197,4 +207,6 @@ class MedicoController extends Controller
 
         return response()->json(['message' => 'Doctors deleted successfully']);
     }
+
+
 }
