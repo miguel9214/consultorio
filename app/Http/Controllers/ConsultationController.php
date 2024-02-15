@@ -49,7 +49,6 @@ class ConsultationController extends Controller
             ->join("patients as pc", "pc.id", "c.pacient_id")
             ->join("persons as ps", "ps.id", "pc.person_id")
             ->join("users as u", "u.id", "ps.user_id")
-            ->join("invoices as i", "c.id", "i.consultation_id")
             ->where('c.id', $id)
             ->select(
                 DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
@@ -64,17 +63,15 @@ class ConsultationController extends Controller
                 "ps.address as address",
                 "ps.phone as phone",
                 "u.email as email",
-                "i.invoice_number as invoice_number",
-                "i.start_date as start_date",
-                "i.due_date as due_date",
-                "i.status as status_invoice",
-                "i.total_amount as total_amount",
-                "i.discounts as discounts",
-                "i.taxes as taxes",
-                "i.amount_paid as amount_paid",
             )->first();
 
-        if (!$data) {
+        $invoice = DB::table("invoices")->select(
+            DB::raw("(IFNULL(MAX(invoice_number),0)+1) as next_invoice_number"),
+        )->first();
+        
+        $data->next_invoice_number = !empty($invoice->next_invoice_number) ? $invoice->next_invoice_number : 1;
+
+        if (!$data) {            
             return response()->json(['error' => 'InvoiceConsultation not found'], 404);
         }
 
