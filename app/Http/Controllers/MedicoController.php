@@ -17,9 +17,13 @@ class MedicoController extends Controller
 {
     public function index()
     {
+
+
         $data = DB::table("persons as ps")
             ->join("users as u", "ps.user_id", "u.id")
             ->join("doctors as ds", "ps.id", "ds.person_id")
+            ->join("doctor_specialties as dsp","ds.id","dsp.speciality_id")
+            ->join("specialties as sp","sp.id","dsp.speciality_id")
             ->select(
                 "ds.id as id",
                 "ps.type_document as tipo_documento",
@@ -34,9 +38,9 @@ class MedicoController extends Controller
                 "ps.state as estado",
                 "ps.neighborhood as barrio",
                 "u.email as email",
+                "sp.name as nombre_Especialidad",
+
             )->get();
-
-
         return response()->json(['message' => 'List of Doctors', 'data' => $data]);
     }
 
@@ -52,6 +56,8 @@ class MedicoController extends Controller
         $medico = DB::table("persons as ps")
         ->join("users as u", "ps.user_id", "u.id")
         ->join("doctors as ds", "ps.id", "ds.person_id")
+        ->join("doctor_specialties as dsp","dsp.id","ds.id")
+        ->join("specialties as sp","sp.id","dsp.id")
         ->where("ps.id", $id)
         ->select(
             "ds.id as id",
@@ -66,6 +72,7 @@ class MedicoController extends Controller
             "ps.city as ciudad",
             "ps.state as estado",
             "ps.neighborhood as barrio",
+            "sp.name",
             // "ds.speciality as especialidad",
             "u.email as email"
         )->first();
