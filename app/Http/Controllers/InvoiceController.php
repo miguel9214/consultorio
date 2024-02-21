@@ -57,9 +57,10 @@ class InvoiceController extends Controller
             'invoice_number' => 'required',
             'start_date' => 'required|date',
             'due_date' => 'required|date',
+            'status' => 'required|string',
             'total_amount' => 'required',
-            'taxes' => 'required',
-            'discounts' => 'required',
+            'taxes' => 'required|numeric',
+            'discounts' => 'required|',
             'amount_paid' => 'required',
             'consultation_id' => 'required',
         ]);
@@ -67,8 +68,9 @@ class InvoiceController extends Controller
         try {
             $invoices = new Invoices();
             $invoices->invoice_number = $request->invoice_number;
-            $invoices->due_date = $request->due_date;
             $invoices->start_date = $request->start_date;
+            $invoices->due_date = $request->due_date;
+            $invoices->status = $request->status;
             $invoices->total_amount = $request->total_amount;
             $invoices->taxes = $request->taxes;
             $invoices->discounts = $request->discounts;
