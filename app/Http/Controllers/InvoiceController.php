@@ -54,22 +54,26 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'invoice_number' => 'required|string',
-            'due_date' => 'required|string',
-            'total_amount' => 'required|string',
-            'taxes' => 'required|string',
-            'discounts' => 'required|date',
-            'amount_paid' => 'required|date',
+            'invoice_number' => 'required',
+            'start_date' => 'required|date',
+            'due_date' => 'required|date',
+            'total_amount' => 'required',
+            'taxes' => 'required',
+            'discounts' => 'required',
+            'amount_paid' => 'required',
+            'consultation_id' => 'required',
         ]);
 
         try {
             $invoices = new Invoices();
             $invoices->invoice_number = $request->invoice_number;
             $invoices->due_date = $request->due_date;
+            $invoices->start_date = $request->start_date;
             $invoices->total_amount = $request->total_amount;
             $invoices->taxes = $request->taxes;
             $invoices->discounts = $request->discounts;
             $invoices->amount_paid = $request->amount_paid;
+            $invoices->consultation_id = $request->consultation_id;
             $invoices->save();
 
             return response()->json(['message' => 'Invoices created successfully']);
