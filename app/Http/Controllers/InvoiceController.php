@@ -43,7 +43,6 @@ class InvoiceController extends Controller
             ->join("users as us", "us.id", "p.user_id")
             ->where('in.id', $id)
             ->select(
-                DB::raw("CONCAT(p.first_name, ' ', p.last_name) as doctor"),
                 DB::raw("CONCAT(ps.first_name, ' ', ps.last_name) as pacient"),
                 "in.id",
                 "in.invoice_number as invoice_number",
