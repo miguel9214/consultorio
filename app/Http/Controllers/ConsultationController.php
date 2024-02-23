@@ -68,10 +68,10 @@ class ConsultationController extends Controller
         $invoice = DB::table("invoices")->select(
             DB::raw("(IFNULL(MAX(invoice_number),0)+1) as next_invoice_number"),
         )->first();
-        
+
         $data->next_invoice_number = !empty($invoice->next_invoice_number) ? $invoice->next_invoice_number : 1;
 
-        if (!$data) {            
+        if (!$data) {
             return response()->json(['error' => 'InvoiceConsultation not found'], 404);
         }
 
