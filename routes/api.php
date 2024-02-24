@@ -40,7 +40,6 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //FACTURA
     Route::get('invoice', [InvoiceController::class, 'index']);
-    Route::get('invoiceConsultation', [InvoiceController::class, 'indexConsultationInvoice']);
     Route::get('invoice/{id}', [InvoiceController::class, 'show']);
     Route::post('invoice', [InvoiceController::class, 'store']);
     Route::put('invoice/{id}', [InvoiceController::class, 'update']);
