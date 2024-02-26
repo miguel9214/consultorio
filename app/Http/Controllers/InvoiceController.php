@@ -116,18 +116,21 @@ class InvoiceController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'invoice_number' => 'required|string',
-            'due_date' => 'required|string',
-            'total_amount' => 'required|string',
-            'taxes' => 'required|string',
-            'discounts' => 'required|date',
-            'amount_paid' => 'required|date',
+            'start_date' => 'required|date',
+            'due_date' => 'required|date',
+            'status' => 'required|string',
+            'total_amount' => 'required',
+            'taxes' => 'required|numeric',
+            'discounts' => 'required|',
+            'amount_paid' => 'required',
         ]);
 
+        // return response()->json($id);
         try {
             $invoices = Invoices::find($id);
-            $invoices->invoice_number = $request->invoice_number;
+            $invoices->start_date = $request->start_date;
             $invoices->due_date = $request->due_date;
+            $invoices->status = $request->status;
             $invoices->total_amount = $request->total_amount;
             $invoices->taxes = $request->taxes;
             $invoices->discounts = $request->discounts;
