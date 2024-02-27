@@ -6,6 +6,7 @@ use App\Models\ConsultationType;
 use App\Models\Medico;
 use App\Models\Pacient;
 use App\Models\Consultation;
+use App\Models\Invoices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -155,8 +156,9 @@ class ConsultationController extends Controller
     public function destroy(string $id)
     {
         $consultation = Consultation::find($id);
+        $invoices = Invoices::find($id);
 
-        if (!$consultation) {
+        if (!$invoices && !$consultation) {
             return response()->json(['message' => 'Consultation not delete']);
         }
 

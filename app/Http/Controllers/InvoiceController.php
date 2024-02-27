@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoices;
+use App\Models\Consultation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\Codification;
@@ -146,8 +147,9 @@ class InvoiceController extends Controller
     public function destroy(string $id)
     {
         $invoices = Invoices::find($id);
+        $Consultation = Consultation::find($id);
 
-        if (!$invoices) {
+        if (!$invoices && !$Consultation) {
             return response()->json(['message' => 'Invoices not delete']);
         }
 
