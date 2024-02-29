@@ -15,34 +15,63 @@ use Illuminate\Database\QueryException;
 
 class MedicoController extends Controller
 {
+
     public function index()
-    {
+{
+    $data = DB::table("persons as ps")
+        ->join("users as u", "ps.user_id", "u.id")
+        ->join("doctors as ds", "ps.id", "ds.person_id")
+        ->leftJoin("doctor_specialties as dspec", "ds.id", "dspec.doctor_id")
+        ->leftJoin("specialties as sp", "dspec.speciality_id", "sp.id")
+        ->select(
+            "ds.id as id",
+            "ps.type_document as tipo_documento",
+            "ps.document as documento",
+            "ps.first_name as nombre",
+            "ps.last_name as apellido",
+            "ps.sex as sexo",
+            "ps.phone as telefono",
+            "ps.birthdate as fecha_nacimiento",
+            "ps.address as direccion",
+            "ps.city as ciudad",
+            "ps.state as estado",
+            "ps.neighborhood as barrio",
+            "u.email as email",
+            "sp.name as especialidad"  // Asegúrate de ajustar el nombre del campo de especialidad según tu esquema
+        )
+        ->orderBy('ds.id')  // Asegura que los resultados estén ordenados por el ID del doctor
+        ->get();
 
-
-        $data = DB::table("persons as ps")
-            ->join("users as u", "ps.user_id", "u.id")
-            ->join("doctors as ds", "ps.id", "ds.person_id")
-            ->join("doctor_specialties as dsp","ds.id","dsp.speciality_id")
-            ->join("specialties as sp","sp.id","dsp.speciality_id")
-            ->select(
-                "ds.id as id",
-                "ps.type_document as tipo_documento",
-                "ps.document as documento",
-                "ps.first_name as nombre",
-                "ps.last_name as apellido",
-                "ps.sex as sexo",
-                "ps.phone as telefono",
-                "ps.birthdate as fecha_nacimiento",
-                "ps.address as direccion",
-                "ps.city as ciudad",
-                "ps.state as estado",
-                "ps.neighborhood as barrio",
-                "u.email as email",
-                "sp.name as nombre_Especialidad",
-
-            )->get();
-        return response()->json(['message' => 'List of Doctors', 'data' => $data]);
+    $formattedData = [];
+    $currentDoctorId = null;
+    foreach ($data as $row) {
+        if ($row->id != $currentDoctorId) {
+            $formattedData[] = [
+                'id' => $row->id,
+                'tipo_documento' => $row->tipo_documento,
+                'documento' => $row->documento,
+                'nombre' => $row->nombre,
+                'apellido' => $row->apellido,
+                'sexo' => $row->sexo,
+                'telefono' => $row->telefono,
+                'fecha_nacimiento' => $row->fecha_nacimiento,
+                'direccion' => $row->direccion,
+                'ciudad' => $row->ciudad,
+                'estado' => $row->estado,
+                'barrio' => $row->barrio,
+                'email' => $row->email,
+                'especialidades' => [$row->especialidad],
+            ];
+            $currentDoctorId = $row->id;
+        } else {
+            $formattedData[count($formattedData) - 1]['especialidades'][] = $row->especialidad;
+        }
     }
+
+    return response()->json(['message' => 'List of Doctors', 'data' => $formattedData]);
+}
+
+    
 
     public function indexPublic()
     {
@@ -57,7 +86,6 @@ class MedicoController extends Controller
         ->join("users as u", "ps.user_id", "u.id")
         ->join("doctors as ds", "ps.id", "ds.person_id")
         ->join("doctor_specialties as dsp","dsp.id","ds.id")
-        ->join("specialties as sp","sp.id","dsp.id")
         ->where("ps.id", $id)
         ->select(
             "ds.id as id",
@@ -72,7 +100,6 @@ class MedicoController extends Controller
             "ps.city as ciudad",
             "ps.state as estado",
             "ps.neighborhood as barrio",
-            "sp.name",
             // "ds.speciality as especialidad",
             "u.email as email"
         )->first();
@@ -133,11 +160,6 @@ class MedicoController extends Controller
 
 
             foreach ($request->specialities as $speciality) {
-                // dd([
-                //     'doctor_id'=>$medicos->id,
-                //     'speciality_id'=>$speciality['id'],
-                // ]);
-
                 DB::table('doctor_specialties')->insert([
                     'doctor_id'=>$medicos->id,
                     'speciality_id'=>$speciality['id'],
@@ -169,13 +191,16 @@ class MedicoController extends Controller
             'city' => 'required|string',
             'state' => 'required|string',
             'neighborhood' => 'required|string',
+            'especialidades' => 'required|array',  // Asegúrate de que el campo de especialidades esté presente y sea un array
         ]);
-
+    
         try {
+            // Busca y actualiza el usuario
             $user = User::find($id);
             $user->email = $request->email;
             $user->save();
-
+    
+            // Busca y actualiza la persona
             $person = Person::find($id);
             $person->type_document = $request->type_document;
             $person->document = $request->document;
@@ -188,31 +213,68 @@ class MedicoController extends Controller
             $person->city = $request->city;
             $person->state = $request->state;
             $person->neighborhood = $request->neighborhood;
-            $person->updated_by_user = Auth::id(); //Auth::id() Es el id de la persona que esta en sesion
+            $person->updated_by_user = Auth::id();
             $person->save();
-
-            $medicos = Medico::find($id);
-            $medicos->save();
-
+    
+            // Busca y actualiza al médico
+            $medico = Medico::find($id);
+            // Si necesitas realizar cambios en el modelo Medico, hazlos aquí
+            // $medico->campo = $request->campo;
+            $medico->save();
+    
+            // Elimina todas las especialidades existentes para este médico
+            DB::table('doctor_specialties')->where('doctor_id', $id)->delete();
+    
+            // Inserta las nuevas especialidades
+            foreach ($request->especialidades as $especialidad) {
+                DB::table('doctor_specialties')->insert([
+                    'doctor_id' => $id,
+                    'speciality_id' => $especialidad['id'],
+                ]);
+            }
+    
             return response()->json(['message' => 'Doctors updated successfully']);
         } catch (QueryException $e) {
             return response()->json(['message' => 'Error updating Doctors: ' . $e->getMessage()], 500);
         }
     }
+    
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $medicos = Medico::find($id);
-        $persona = Person::find($id);
-        $user = User::find($id);
-
-        if (!$medicos && !$persona && !$user) {
-            return response()->json(['message' => 'Doctors not delete']);
+        DB::beginTransaction();
+    
+        try {
+            // Busca el médico
+            $medico = Medico::find($id);
+    
+            if (!$medico) {
+                // Si no se encuentra el médico, realiza el rollback y devuelve una respuesta
+                DB::rollBack();
+                return response()->json(['message' => 'Doctor not found'], 404);
+            }
+    
+            // Obtiene el ID de la persona y el usuario asociado al médico
+            $personId = $medico->person_id;
+            $userId = Person::find($personId)->user_id;
+    
+            // Elimina las especialidades asociadas al médico
+            DB::table('doctor_specialties')->where('doctor_id', $id)->delete();
+    
+            // Elimina al médico, la persona y el usuario
+            $medico->delete();
+            Person::find($personId)->delete();
+            User::find($userId)->delete();
+    
+            // Commit después de eliminar correctamente
+            DB::commit();
+    
+            return response()->json(['message' => 'Doctor deleted successfully']);
+        } catch (QueryException $e) {
+            // En caso de error, realiza el rollback y devuelve una respuesta con el mensaje de error
+            DB::rollBack();
+            return response()->json(['message' => 'Error deleting doctor: ' . $e->getMessage()], 500);
         }
-
-        $medicos->delete();
-
-        return response()->json(['message' => 'Doctors deleted successfully']);
     }
 
 
