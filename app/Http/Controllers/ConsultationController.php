@@ -35,8 +35,8 @@ class ConsultationController extends Controller
                 "c.hour as hora",
                 "c.observation as observacion",
                 "c.status as estado",
-            )
-            ->get();
+                DB::raw("(CASE WHEN EXISTS (SELECT 1 FROM invoices as i WHERE i.consultation_id = c.id) THEN 'Facturado' ELSE 'No Facturado' END) as status_invoice")
+            )->get();
 
         return response()->json(['message' => 'List of Consultation', 'data' => $data]);
     }
