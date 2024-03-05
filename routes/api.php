@@ -6,9 +6,9 @@ use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\EpsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MedicoController;
-use App\Http\Controllers\PersonController;
 use App\Http\Controllers\SpecialityController;
-use App\Models\Specialty;
+use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\MedicineController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -63,8 +63,20 @@ Route::post('speciality', [SpecialityController::class, 'store']);
 Route::put('speciality/{id}', [SpecialityController::class, 'update']);
 Route::delete('speciality/{id}', [SpecialityController::class, 'destroy']);
 
+//PRESCRIPTION
+Route::get('prescription', [PrescriptionController::class, 'index']);
+Route::get('prescription/{id}', [PrescriptionController::class, 'show']);
+Route::post('prescription', [PrescriptionController::class, 'store']);
+Route::put('prescription/{id}', [PrescriptionController::class, 'update']);
+Route::delete('prescription/{id}', [PrescriptionController::class, 'destroy']);
 
-Route::apiResource("v1/persons", PersonController::class);
+//MEDICINE
+Route::get('medicine', [MedicineController::class, 'index']);
+Route::get('medicine/{id}', [MedicineController::class, 'show']);
+Route::post('medicine', [MedicineController::class, 'store']);
+Route::put('medicine/{id}', [MedicineController::class, 'update']);
+Route::delete('medicine/{id}', [MedicineController::class, 'destroy']);
+
 
 Route::post('register', [AuthController::class, 'register']);
 Route::get('doctor', [AuthController::class, 'doctor']);

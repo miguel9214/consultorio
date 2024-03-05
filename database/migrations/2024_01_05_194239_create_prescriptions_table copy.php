@@ -6,25 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->unsignedInteger("id")->autoIncrement();
-            $table->string("dosage");
-            $table->date("observacion");
-            $table->decimal('diagnosis');
+            $table->date("date_prescription");
+            $table->string('dose');
+            $table->string('treatment');
+            $table->string('additional_instructions');
             $table->unsignedInteger("consultation_id");
+            $table->unsignedInteger("medicine_id");
             $table->timestamps();
             $table->foreign('consultation_id')->references('id')->on('consultations');
+            $table->foreign('medicine_id')->references('id')->on('medicines');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('prescriptions');
