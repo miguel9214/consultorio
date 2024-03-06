@@ -27,9 +27,10 @@ class PrescriptionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'dosage' => 'required|string',
-            'observacion' => 'required|date',
-            'diagnosis' => 'required|string',
+            'date_prescription' => 'required|date',
+            'dose' => 'required|string',
+            'treatment' => 'required|string',
+            'additional_instructions' => 'required|string',
         ]);
 
         $prescription = Prescription::create([

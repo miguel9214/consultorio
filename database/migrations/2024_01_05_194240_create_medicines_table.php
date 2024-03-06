@@ -13,6 +13,7 @@ return new class extends Migration
             $table->unsignedInteger("id")->autoIncrement();
             $table->string("code");
             $table->string("name");
+            $table->timestamps();
         });
     }
 

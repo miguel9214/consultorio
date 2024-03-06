@@ -14,10 +14,10 @@ class Prescription extends Model
 
     protected $fillable = [
         'date_prescription',
-        'medicine',
         'dose',
         'treatment',
         'additional_instructions',
         'consultation_id',
+        'medicine_idS',
     ];
 }
