@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("dosing_frequency");
             $table->string("indications");
             $table->string("contraindications");
-            $table->string("administration_method");
+            $table->enum('administration_method', ['Inyectable intramuscular (IM)', 'Inyectable subcutáneo (SC)', 'Inyectable intradérmico (ID)', 'Inhalatoria', 'Rectal', 'Vaginal', 'Oftálmica', 'Ótica', 'Intranasal', 'Sublingual' ]);
             $table->string("pharmaceutical_laboratory");
             $table->float('price');
             $table->timestamps();
