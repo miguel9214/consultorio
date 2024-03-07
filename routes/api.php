@@ -45,12 +45,26 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('invoice/{id}', [InvoiceController::class, 'update']);
     Route::delete('invoice/{id}', [InvoiceController::class, 'destroy']);
 
+    //MEDICINE
+    Route::get('medicine', [MedicineController::class, 'index']);
+    Route::get('medicine/{id}', [MedicineController::class, 'show']);
+    Route::post('medicine', [MedicineController::class, 'store']);
+    Route::put('medicine/{id}', [MedicineController::class, 'update']);
+    Route::delete('medicine/{id}', [MedicineController::class, 'destroy']);
+
     //MEDICO
     Route::get('medico', [MedicoController::class, 'index']);
     Route::get('medico/{id}', [MedicoController::class, 'show']);
     Route::post('medico', [MedicoController::class, 'store']);
     Route::put('medico/{id}', [MedicoController::class, 'update']);
     Route::delete('medico/{id}', [MedicoController::class, 'destroy']);
+
+    //PRESCRIPTION
+    Route::get('prescription', [PrescriptionController::class, 'index']);
+    Route::get('prescription/{id}', [PrescriptionController::class, 'show']);
+    Route::post('prescription', [PrescriptionController::class, 'store']);
+    Route::put('prescription/{id}', [PrescriptionController::class, 'update']);
+    Route::delete('prescription/{id}', [PrescriptionController::class, 'destroy']);
 
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('userProfile', [AuthController::class, 'userProfile']);
@@ -62,20 +76,6 @@ Route::get('speciality/{id}', [SpecialityController::class, 'show']);
 Route::post('speciality', [SpecialityController::class, 'store']);
 Route::put('speciality/{id}', [SpecialityController::class, 'update']);
 Route::delete('speciality/{id}', [SpecialityController::class, 'destroy']);
-
-//PRESCRIPTION
-Route::get('prescription', [PrescriptionController::class, 'index']);
-Route::get('prescription/{id}', [PrescriptionController::class, 'show']);
-Route::post('prescription', [PrescriptionController::class, 'store']);
-Route::put('prescription/{id}', [PrescriptionController::class, 'update']);
-Route::delete('prescription/{id}', [PrescriptionController::class, 'destroy']);
-
-//MEDICINE
-Route::get('medicine', [MedicineController::class, 'index']);
-Route::get('medicine/{id}', [MedicineController::class, 'show']);
-Route::post('medicine', [MedicineController::class, 'store']);
-Route::put('medicine/{id}', [MedicineController::class, 'update']);
-Route::delete('medicine/{id}', [MedicineController::class, 'destroy']);
 
 
 Route::post('register', [AuthController::class, 'register']);

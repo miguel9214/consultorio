@@ -27,11 +27,25 @@ class MedicineController extends Controller
         $request->validate([
             'code' => 'required|string',
             'name' => 'required|string',
+            'dosage' => 'required|string',
+            'dosing_frequency' => 'required|string',
+            'indications' => 'required|string',
+            'contraindications' => 'required|string',
+            'administration_method' => 'required|string',
+            'pharmaceutical_laboratory' => 'required|string',
+            'price' => 'required|number',
         ]);
 
         $medicine = Medicine::create([
             'code' => $request->input('code'),
             'name' => $request->input('name'),
+            'dosage' => $request->input('dosage'),
+            'dosing_frequency' => $request->input('dosing_frequency'),
+            'indications' => $request->input('indications'),
+            'contraindications' => $request->input('contraindications'),
+            'administration_method' => $request->input('administration_method'),
+            'pharmaceutical_laboratory' => $request->input('pharmaceutical_laboratory'),
+            'price' => $request->input('price'),
         ]);
         $medicine->save();
 
@@ -59,12 +73,26 @@ class MedicineController extends Controller
         $request->validate([
             'code' => 'required|string',
             'name' => 'required|string',
+            'dosage' => 'required|string',
+            'dosing_frequency' => 'required|string',
+            'indications' => 'required|string',
+            'contraindications' => 'required|string',
+            'administration_method' => 'required|string',
+            'pharmaceutical_laboratory' => 'required|string',
+            'price' => 'required|number',
         ]);
 
         try {
             $medicine = Medicine::find($id);
             $medicine->code = $request->code;
             $medicine->name = $request->name;
+            $medicine->dosage = $request->dosage;
+            $medicine->dosing_frequency = $request->dosing_frequency;
+            $medicine->indications = $request->indications;
+            $medicine->contraindications = $request->contraindications;
+            $medicine->administration_method = $request->administration_method;
+            $medicine->pharmaceutical_laboratory = $request->pharmaceutical_laboratory;
+            $medicine->price = $request->price;
             $medicine->save();
 
             return response()->json(['message' => 'Medicine updated successfully']);
