@@ -15,5 +15,12 @@ class Medicine extends Model
     protected $fillable = [
         'code',
         'name',
+        'dosage',
+        'dosing_frequency',
+        'indications',
+        'contraindications',
+        'administration_method',
+        'pharmaceutical_laboratory',
+        'price',
     ];
 }
