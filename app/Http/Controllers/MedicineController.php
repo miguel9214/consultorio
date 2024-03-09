@@ -33,7 +33,7 @@ class MedicineController extends Controller
             'contraindications' => 'required|string',
             'administration_method' => 'required|string',
             'pharmaceutical_laboratory' => 'required|string',
-            'price' => 'required|number',
+            'price' => 'required',
         ]);
 
         $medicine = Medicine::create([
