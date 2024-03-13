@@ -34,9 +34,10 @@ class PrescriptionController extends Controller
         ]);
 
         $prescription = Prescription::create([
-            'dosage' => $request->input('dosage'),
-            'observacion' => $request->input('observacion'),
-            'diagnosis' => $request->input('diagnosis'),
+            'date_prescription' => $request->input('date_prescription'),
+            'dose' => $request->input('dose'),
+            'treatment' => $request->input('treatment'),
+            'additional_instructions' => $request->input('additional_instructions'),
         ]);
         $prescription->save();
 
@@ -62,16 +63,18 @@ class PrescriptionController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'dosage' => 'required|string',
-            'observacion' => 'required|date',
-            'diagnosis' => 'required|string',
+            'date_prescription' => 'required|date',
+            'dose' => 'required|string',
+            'treatment' => 'required|string',
+            'additional_instructions' => 'required|string',
         ]);
 
         try {
             $prescription = Prescription::find($id);
-            $prescription->dosage = $request->dosage;
-            $prescription->observacion = $request->observacion;
-            $prescription->diagnosis = $request->diagnosis;
+            $prescription->date_prescription = $request->date_prescription;
+            $prescription->dose = $request->dose;
+            $prescription->treatment = $request->treatment;
+            $prescription->additional_instructions = $request->additional_instructions;
             $prescription->save();
 
             return response()->json(['message' => 'Prescription updated successfully']);
