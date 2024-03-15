@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Medico;
 use App\Models\Pacient;
+use App\Models\Medicine;
 use App\Models\Consultation;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
@@ -27,27 +28,35 @@ class PrescriptionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'date_prescription' => 'required|date',
-            'dose' => 'required|string',
-            'treatment' => 'required|string',
-            'additional_instructions' => 'required|string',
+            'date_prescription' => 'required',
+            'medicines' => 'required|array', 
+            'medicines.*.medicine_id' => 'required|integer', 
+            'medicines.*.dose' => 'required|string', 
+            'medicines.*.treatment' => 'required|string', 
+            'medicines.*.additional_instructions' => 'required|string', 
         ]);
-
-        $prescription = Prescription::create([
-            'date_prescription' => $request->input('date_prescription'),
-            'dose' => $request->input('dose'),
-            'treatment' => $request->input('treatment'),
-            'additional_instructions' => $request->input('additional_instructions'),
-        ]);
-        $prescription->save();
-
-
-        if ($prescription) {
+    
+        try {
+            $prescription = new Prescription();
+            $prescription->date_prescription = $request->date_prescription;
+            $prescription->save();
+    
+            foreach ($request->prescriptions as $prescriptionData) {
+                $prescription = new Prescription();
+                $prescription->prescription_id = $prescription->id;
+                $prescription->medicine_id = $prescriptionData['medicine_id'];
+                $prescription->dose = $prescriptionData['dose'];
+                $prescription->treatment = $prescriptionData['treatment'];
+                $prescription->additional_instructions = $prescriptionData['additional_instructions'];
+                $prescription->save();
+            }
+    
             return response()->json(['message' => 'Prescription created successfully']);
-        } else {
-            return response()->json(['message' => 'Error in created the Prescription']);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Error creating the Prescription: ' . $e->getMessage()], 500);
         }
     }
+    
 
     public function show(string $id)
     {
