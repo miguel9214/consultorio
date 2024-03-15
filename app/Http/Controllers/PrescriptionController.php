@@ -28,36 +28,34 @@ class PrescriptionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'date_prescription' => 'required',
-            'medicines' => 'required|array', 
-            'medicines.*.medicine_id' => 'required|integer', 
-            'medicines.*.dose' => 'required|string', 
-            'medicines.*.treatment' => 'required|string', 
-            'medicines.*.additional_instructions' => 'required|string', 
+            'date_prescription' => 'required|date',
+            'medicine_id' => 'required|integer', 
+            'dose' => 'required|string', 
+            'treatment' => 'required|string',
+            'additional_instructions' => 'required|string', 
+            'consultation_id' => 'required|integer', 
         ]);
     
         try {
             $prescription = new Prescription();
             $prescription->date_prescription = $request->date_prescription;
-            $prescription->save();
+            $prescription->consultation_id = $request->consultation_id; 
     
-            foreach ($request->prescriptions as $prescriptionData) {
-                $prescription = new Prescription();
-                $prescription->prescription_id = $prescription->id;
-                $prescription->medicine_id = $prescriptionData['medicine_id'];
-                $prescription->dose = $prescriptionData['dose'];
-                $prescription->treatment = $prescriptionData['treatment'];
-                $prescription->additional_instructions = $prescriptionData['additional_instructions'];
-                $prescription->save();
+    foreach ($request->medicines as $medicineData) {
+                $prescription->medicine_id = $medicineData['medicine_id'];
+                $prescription->dose = $medicineData['dose'];
+                $prescription->treatment = $medicineData['treatment'];
+                $prescription->additional_instructions = $medicineData['additional_instructions'];
             }
-    
+
+            $prescription->save();
+            
             return response()->json(['message' => 'Prescription created successfully']);
         } catch (QueryException $e) {
             return response()->json(['message' => 'Error creating the Prescription: ' . $e->getMessage()], 500);
         }
     }
     
-
     public function show(string $id)
     {
         $prescription = Prescription::find($id);
