@@ -29,32 +29,33 @@ class PrescriptionController extends Controller
     {
         $request->validate([
             'date_prescription' => 'required|date',
-            'medicine_id' => 'required|integer', 
-            'dose' => 'required|string', 
-            'treatment' => 'required|string',
-            'additional_instructions' => 'required|string', 
             'consultation_id' => 'required|integer', 
+            'medicines' => 'required|array', // Cambiado a 'medicines' en lugar de 'medicine_id'
+            'medicines.*.medicine_id' => 'required|integer', // Validación de los campos dentro de 'medicines'
+            'medicines.*.dose' => 'required|string',
+            'medicines.*.treatment' => 'required|string',
+            'medicines.*.additional_instructions' => 'required|string', 
         ]);
     
-        try {
-            $prescription = new Prescription();
-            $prescription->date_prescription = $request->date_prescription;
-            $prescription->consultation_id = $request->consultation_id; 
-    
-    foreach ($request->medicines as $medicineData) {
+        try {    
+            // Iterar sobre cada medicamento y almacenarlo por separado
+            foreach ($request->medicines as $medicineData) {
+                $prescription = new Prescription(); // Crear una nueva instancia de Prescription para cada medicamento
+                $prescription->date_prescription = $request->date_prescription;
+                $prescription->consultation_id = $request->consultation_id; 
                 $prescription->medicine_id = $medicineData['medicine_id'];
                 $prescription->dose = $medicineData['dose'];
                 $prescription->treatment = $medicineData['treatment'];
                 $prescription->additional_instructions = $medicineData['additional_instructions'];
+                $prescription->save();
             }
-
-            $prescription->save();
-            
-            return response()->json(['message' => 'Prescription created successfully']);
+    
+            return response()->json(['message' => 'Prescriptions created successfully']);
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Error creating the Prescription: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Error creating the Prescriptions: ' . $e->getMessage()], 500);
         }
     }
+    
     
     public function show(string $id)
     {
