@@ -130,9 +130,6 @@ class MedicoController extends Controller
         return response()->json(['message' => 'Doctor found', 'data' => $formattedData]);
     }
 
-
-
-
     public function store(Request $request)
     {
         $request->validate([
