@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //PRESCRIPTION
     Route::get('prescription', [PrescriptionController::class, 'index']);
+    Route::get('prescriptionConsultation/{id}', [PrescriptionController::class, 'showPrescription']);
     Route::get('prescription/{id}', [PrescriptionController::class, 'show']);
     Route::post('prescription', [PrescriptionController::class, 'store']);
     Route::put('prescription/{id}', [PrescriptionController::class, 'update']);

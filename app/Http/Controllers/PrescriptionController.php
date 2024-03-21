@@ -24,6 +24,7 @@ class PrescriptionController extends Controller
 
         return response()->json(['message' => 'List prescription', 'data' => $prescription]);
     }
+    
 
     public function store(Request $request)
     {
@@ -75,6 +76,28 @@ class PrescriptionController extends Controller
             return response()->json(['message' => 'Prescription found', 'data' => $data]);
         } else {
             return response()->json(['message' => 'Prescription not found']);
+        }
+    }
+
+    public function showPrescription(string $id)
+    {
+        $data = DB::table('medicines as m')
+        ->join('prescriptions as p', 'm.id', 'p.medicine_id')
+        ->where('p.consultation_id', $id)
+        ->select(
+            'm.code as medicine_code',
+            'm.name as medicine_name', 
+            'p.dose', 
+            'p.treatment', 
+            'p.additional_instructions',
+            'm.id as medicine_id',
+            'p.id as prescription_id',
+        )->get();
+
+        if ($data) {
+            return response()->json(['message' => 'Prescription found - viewPrescription', 'data' => $data]);
+        } else {
+            return response()->json(['message' => 'Prescription not found - viewPrescription']);
         }
     }
 
