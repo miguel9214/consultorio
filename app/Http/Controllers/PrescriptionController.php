@@ -90,8 +90,10 @@ class PrescriptionController extends Controller
             'p.dose', 
             'p.treatment', 
             'p.additional_instructions',
-            'm.id as medicine_id',
+            'p.date_prescription',
             'p.id as prescription_id',
+            'p.consultation_id',
+            'm.id as medicine_id',
         )->get();
 
         if ($data) {
