@@ -62,7 +62,6 @@ class PrescriptionController extends Controller
             return response()->json(['message' => 'Error creating the Prescriptions: ' . $e->getMessage()], 500);
         }
     }
-
     
     public function show(string $id)
     {
@@ -113,32 +112,26 @@ class PrescriptionController extends Controller
     {
         $request->validate([
             'date_prescription' => 'required|date',
-            'dose' => 'required|string',
-            'treatment' => 'required|string',
-            'additional_instructions' => 'required|string', 
+            'medicines.*.dose' => 'required|string',
+            'medicines.*.treatment' => 'required|string',
+            'medicines.*.additional_instructions' => 'required|string',
         ]);
-
-        try {    
+    
+        try {
             foreach ($request->medicines as $medicineData) {
-                $existingPrescription = Prescription::where('consultation_id', $request->consultation_id)
-                                                    ->where('medicine_id', $medicineData['medicine_id'])
-                                                    ->exists();
-                                                    
-                if ($existingPrescription) {
-                    return response()->json(['message' => 'El medicamento ya ha sido prescrito para esta consulta'], 400);
-                }
+                $prescription = Prescription::findOrFail($id);
                 
-                $prescription = new Prescription();
                 $prescription->date_prescription = $request->date_prescription;
-                $prescription->dose = $request->dose;
-                $prescription->treatment = $request->treatment;
-                $prescription->additional_instructions = $request->additional_instructions;
+                $prescription->dose = $medicineData['dose'];
+                $prescription->treatment = $medicineData['treatment'];
+                $prescription->additional_instructions = $medicineData['additional_instructions'];
+                
                 $prescription->save();
             }
-
+    
             return response()->json(['message' => 'Prescriptions updated successfully']);
         } catch (QueryException $e) {
-            return response()->json(['message' => 'Error updated the Prescriptions: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Error updating the Prescriptions: ' . $e->getMessage()], 500);
         }
     }
 
