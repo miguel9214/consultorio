@@ -98,6 +98,7 @@ class PrescriptionController extends Controller
             'p.additional_instructions',
             'p.date_prescription',
             'p.id as prescription_id',
+            'p.medicine_id as medicine_id',
             'p.consultation_id as consultation_id',
         )->get();
 
