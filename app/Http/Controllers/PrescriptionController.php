@@ -38,6 +38,9 @@ class PrescriptionController extends Controller
         ]);
 
         try {    
+
+            Prescription::where('consultation_id', $request->consultation_id)->delete();
+
             foreach ($request->medicines as $medicineData) {
                 $existingPrescription = Prescription::where('consultation_id', $request->consultation_id)
                                                     ->where('medicine_id', $medicineData['medicine_id'])
